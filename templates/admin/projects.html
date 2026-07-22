@@ -1,0 +1,30 @@
+{% extends 'admin/base.html' %}
+{% block title %}Proyectos{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem">
+  <span style="font-size:13px;color:#6b7280">{{ projects|length }} proyecto(s)</span>
+  <a href="{{ url_for('project_new') }}" class="btn btn-ac">➕ Nuevo proyecto</a>
+</div>
+<div class="card" style="padding:0">
+  <table>
+    <thead><tr><th>Nombre</th><th>Estado</th><th>Imágenes</th><th>Acciones</th></tr></thead>
+    <tbody>
+    {% for p in projects %}
+    <tr>
+      <td><strong>{{ p.name }}</strong></td>
+      <td>{% if p.live %}<span class="badge bg">● Live</span>{% else %}<span class="badge bb">Oculto</span>{% endif %}</td>
+      <td>{{ p.images|length }}</td>
+      <td style="display:flex;gap:.4rem">
+        <a href="{{ url_for('project_edit', pid=p.id) }}" class="btn btn-gh btn-sm">✏️ Editar</a>
+        <form method="POST" action="{{ url_for('project_delete', pid=p.id) }}" onsubmit="return confirm('¿Eliminar {{ p.name }}?')">
+          <button class="btn btn-re btn-sm">🗑️</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" style="text-align:center;color:#9ca3af;padding:2rem">Sin proyectos. <a href="{{ url_for('project_new') }}">Crear uno</a></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

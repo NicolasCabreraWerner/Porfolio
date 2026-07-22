@@ -1,0 +1,27 @@
+{% extends 'admin/base.html' %}{% block title %}Idiomas{% endblock %}{% block content %}
+<div class="card"><div class="ctitle">➕ Agregar</div>
+<form method="POST"><input type="hidden" name="action" value="add"/>
+<div class="fg">
+  <div class="f"><label>Idioma</label><input name="lang_name" placeholder="Español"/></div>
+  <div class="f"><label>Nivel (es)</label><input name="level" placeholder="Nativo"/></div>
+  <div class="f"><label>Nivel (en)</label><input name="level_en" placeholder="Native"/></div>
+</div>
+<button type="submit" class="btn btn-ac" style="margin-top:.7rem">➕ Agregar</button>
+</form></div>
+<div class="card" style="padding:0"><table>
+<thead><tr><th>Idioma</th><th>Nivel (es)</th><th>Nivel (en)</th><th>Acciones</th></tr></thead>
+<tbody>{% for l in items %}
+<tr>
+  <form method="POST"><input type="hidden" name="action" value="update"/><input type="hidden" name="id" value="{{ l.id }}"/>
+  <td><input name="lang_name" value="{{ l.lang_name }}" style="padding:.35rem .5rem;border:1px solid #e5e7eb;border-radius:5px;font-size:13px"/></td>
+  <td><input name="level" value="{{ l.level }}" style="padding:.35rem .5rem;border:1px solid #e5e7eb;border-radius:5px;font-size:13px"/></td>
+  <td><input name="level_en" value="{{ l.level_en }}" style="padding:.35rem .5rem;border:1px solid #e5e7eb;border-radius:5px;font-size:13px"/></td>
+  <td style="white-space:nowrap">
+    <button type="submit" class="btn btn-gh btn-sm">💾</button>
+  </form>
+  <form method="POST" onsubmit="return confirm('¿Eliminar?')" style="display:inline">
+    <input type="hidden" name="action" value="delete"/><input type="hidden" name="id" value="{{ l.id }}"/>
+    <button type="submit" class="btn btn-re btn-sm">🗑️</button>
+  </form></td>
+</tr>{% endfor %}</tbody></table></div>
+{% endblock %}

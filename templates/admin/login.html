@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0a;display:flex;align-items:center;justify-content:center;min-height:100vh}.box{background:#111;border:1px solid #222;border-radius:12px;padding:2.5rem;width:100%;max-width:360px}.logo{font-size:20px;font-weight:700;color:#fff;margin-bottom:.3rem}sub{font-size:13px;color:#555;display:block;margin-bottom:2rem}label{display:block;font-size:12px;color:#888;margin-bottom:.4rem}input{width:100%;padding:.7rem .9rem;background:#1a1a1a;border:1px solid #333;border-radius:7px;color:#fff;font-size:14px;font-family:Inter,sans-serif;outline:none}input:focus{border-color:#2563eb}.err{background:#1f0808;color:#f87171;border:1px solid #3f1010;border-radius:7px;padding:.6rem .9rem;font-size:13px;margin-top:.8rem}button{width:100%;padding:.75rem;background:#fff;color:#000;border:none;border-radius:7px;font-size:14px;font-weight:600;cursor:pointer;margin-top:1.2rem}button:hover{opacity:.85}.hint{font-size:11px;color:#444;margin-top:1.2rem;text-align:center}</style>
+</head><body>
+<div class="box">
+  <div class="logo">JNCW</div>
+  <sub>Panel de administración</sub>
+  <form method="POST">
+    <label>Contraseña</label>
+    <input type="password" name="password" autofocus placeholder="••••••••"/>
+    {% if error %}<div class="err">{{ error }}</div>{% endif %}
+    <button type="submit">Ingresar</button>
+  </form>
+  <div class="hint">Configurá ADMIN_PASSWORD en Railway → Variables</div>
+</div>
+</body></html>

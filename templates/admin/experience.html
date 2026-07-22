@@ -1,0 +1,35 @@
+{% extends 'admin/base.html' %}{% block title %}Experiencia{% endblock %}{% block content %}
+<div class="card"><div class="ctitle">➕ Agregar</div>
+<form method="POST"><input type="hidden" name="action" value="add"/>
+<div class="fg">
+  <div class="f"><label>Período</label><input name="years" placeholder="2022 — hoy"/></div>
+  <div class="f"><label>Empresa (es)</label><input name="company"/></div>
+  <div class="f"><label>Empresa (en)</label><input name="company_en"/></div>
+  <div class="f"><label>Rol (es)</label><input name="role"/></div>
+  <div class="f"><label>Rol (en)</label><input name="role_en"/></div>
+  <div class="f full"><label>Descripción (es)</label><textarea name="detail"></textarea></div>
+  <div class="f full"><label>Descripción (en)</label><textarea name="detail_en"></textarea></div>
+</div>
+<button type="submit" class="btn btn-ac" style="margin-top:.7rem">➕ Agregar</button>
+</form></div>
+{% for e in items %}
+<div class="card"><div class="ctitle">{{ e.company }} — {{ e.years }}</div>
+<form method="POST"><input type="hidden" name="action" value="update"/><input type="hidden" name="id" value="{{ e.id }}"/>
+<div class="fg">
+  <div class="f"><label>Período</label><input name="years" value="{{ e.years }}"/></div>
+  <div class="f"></div>
+  <div class="f"><label>Empresa (es)</label><input name="company" value="{{ e.company }}"/></div>
+  <div class="f"><label>Empresa (en)</label><input name="company_en" value="{{ e.company_en }}"/></div>
+  <div class="f"><label>Rol (es)</label><input name="role" value="{{ e.role }}"/></div>
+  <div class="f"><label>Rol (en)</label><input name="role_en" value="{{ e.role_en }}"/></div>
+  <div class="f full"><label>Descripción (es)</label><textarea name="detail">{{ e.detail }}</textarea></div>
+  <div class="f full"><label>Descripción (en)</label><textarea name="detail_en">{{ e.detail_en }}</textarea></div>
+</div>
+<div style="display:flex;gap:.5rem;margin-top:.7rem">
+  <button type="submit" class="btn btn-bk">💾 Guardar</button>
+  <button type="submit" form="de{{ e.id }}" class="btn btn-re">🗑️ Eliminar</button>
+</div></form>
+<form id="de{{ e.id }}" method="POST" onsubmit="return confirm('¿Eliminar?')">
+  <input type="hidden" name="action" value="delete"/><input type="hidden" name="id" value="{{ e.id }}"/>
+</form></div>
+{% endfor %}{% endblock %}

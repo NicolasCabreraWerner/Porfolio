@@ -1,0 +1,269 @@
+{
+  "info": {
+    "full_name": "Juan Nicolás Cabrera Werner",
+    "role_es": "Python Developer — Soporte IT",
+    "role_en": "Python Developer — IT Support",
+    "location": "Tucumán, Argentina",
+    "year": "2026",
+    "bio_es": "Desarrollador Python con experiencia real en producción. Creador de Zentra, llevado de app de escritorio a plataforma web con IA integrada. Orientado a Data Science y Machine Learning.",
+    "bio_en": "Python developer with real production experience. Creator of Zentra, taken from desktop app to web platform with integrated AI. Focused on Data Science and Machine Learning.",
+    "email": "nicolascabrerawerner@gmail.com",
+    "github": "https://github.com/NicolasCabreraWerner",
+    "phone": "381-2201696",
+    "initials": "NC",
+    "avatar_mode": "initials",
+    "photo_file": ""
+  },
+  "projects": [
+    {
+      "id": "zentra",
+      "name": "Zentra",
+      "name_en": "Zentra",
+      "eyebrow": "Producto propio",
+      "eyebrow_en": "Own product",
+      "description": "Sistema de gestión de conocimiento y soporte técnico desarrollado íntegramente de forma autónoma para Núcleo IT. Nació como app de escritorio (Zentra Organizador) y evolucionó a Zentra Support IA, una plataforma web completa con inteligencia artificial integrada, desplegada en la nube con más de 33 versiones documentadas.",
+      "desc_en": "Knowledge management and technical support system developed entirely autonomously for Núcleo IT. Started as a desktop app and evolved into Zentra Support AI, a full web platform with integrated AI, deployed in the cloud with over 33 documented versions.",
+      "phase1_title": "Zentra Organizador",
+      "phase1_title_en": "Zentra Organizador",
+      "phase1_sub": "Desktop",
+      "phase1_sub_en": "Desktop",
+      "phase1_tech": "Python · Tkinter · OOP · SQLite",
+      "phase2_title": "Zentra Support IA",
+      "phase2_title_en": "Zentra Support AI",
+      "phase2_sub": "Plataforma web",
+      "phase2_sub_en": "Web platform",
+      "phase2_tech": "Flask · PostgreSQL · OpenAI API · Railway",
+      "stats": [
+        {
+          "num": "33+",
+          "label": "versiones",
+          "label_en": "versions"
+        },
+        {
+          "num": "26",
+          "label": "despliegues",
+          "label_en": "deploys"
+        },
+        {
+          "num": "10+",
+          "label": "módulos",
+          "label_en": "modules"
+        },
+        {
+          "num": "100%",
+          "label": "autónomo",
+          "label_en": "solo built"
+        }
+      ],
+      "live": true,
+      "images": [
+        {
+          "id": "d1",
+          "filename": "desktop-1.jpg",
+          "caption": "Vista principal — búsqueda, filtros y editor",
+          "caption_en": "Main view — search, filters and editor",
+          "tab": "desktop",
+          "wide": true
+        },
+        {
+          "id": "d2",
+          "filename": "desktop-2.jpg",
+          "caption": "Gestión de adjuntos por registro",
+          "caption_en": "Attachment management per record",
+          "tab": "desktop",
+          "wide": false
+        },
+        {
+          "id": "d3",
+          "filename": "desktop-3.jpg",
+          "caption": "Reproductor de audio · modo claro",
+          "caption_en": "Audio player · light mode",
+          "tab": "desktop",
+          "wide": false
+        },
+        {
+          "id": "w1",
+          "filename": "web-1.jpg",
+          "caption": "Contact Center — herramientas e integraciones",
+          "caption_en": "Contact Center — tools and integrations",
+          "tab": "web",
+          "wide": true
+        },
+        {
+          "id": "w2",
+          "filename": "web-2.jpg",
+          "caption": "AI Assistant con dictado por voz",
+          "caption_en": "AI Assistant with voice dictation",
+          "tab": "web",
+          "wide": false
+        },
+        {
+          "id": "w3",
+          "filename": "web-3.jpg",
+          "caption": "Respuestas rápidas con comandos",
+          "caption_en": "Quick replies with commands",
+          "tab": "web",
+          "wide": false
+        },
+        {
+          "id": "w4",
+          "filename": "web-4.jpg",
+          "caption": "Notas inteligentes con autoguardado",
+          "caption_en": "Smart notes with auto-save",
+          "tab": "web",
+          "wide": false
+        },
+        {
+          "id": "w5",
+          "filename": "web-5.jpg",
+          "caption": "Configuración — paletas y módulos",
+          "caption_en": "Settings — palettes and modules",
+          "tab": "web",
+          "wide": true
+        }
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "id": "e1",
+      "years": "2022 — hoy",
+      "company": "Nucleo IT",
+      "company_en": "Nucleo IT",
+      "role": "Analista Soporte IT · Remoto",
+      "role_en": "IT Support Analyst · Remote",
+      "detail": "Desarrollo y mantenimiento de Zentra. Instalación de sistemas POS, soporte de periféricos, asistencia a clientes, SQL y Web Scraping.",
+      "detail_en": "Development and maintenance of Zentra. POS installation, peripheral support, client assistance, SQL and Web Scraping."
+    },
+    {
+      "id": "e2",
+      "years": "2021 — hoy",
+      "company": "MS Informática",
+      "company_en": "MS Informática",
+      "role": "Técnico PC · Autónomo",
+      "role_en": "PC Technician · Freelance",
+      "detail": "Administración Windows, diagnóstico de fallas, redes, armado y mantenimiento de equipos.",
+      "detail_en": "Windows administration, fault diagnosis, networking, computer assembly and maintenance."
+    },
+    {
+      "id": "e3",
+      "years": "2020 — 2022",
+      "company": "Sec. MiPyME Tucumán",
+      "company_en": "MiPyME Secretary",
+      "role": "Pasante Sistemas",
+      "role_en": "Systems Intern",
+      "detail": "Mantenimiento de equipos, asistencia técnica, Data Entry.",
+      "detail_en": "Equipment maintenance, technical assistance, Data Entry."
+    },
+    {
+      "id": "e4",
+      "years": "2017 — 2021",
+      "company": "Lego Arquitectura",
+      "company_en": "Lego Arquitectura",
+      "role": "Técnico Eléctrico",
+      "role_en": "Electrical Technician",
+      "detail": "Planos eléctricos, instalaciones de baja y media tensión, dirección técnica en obras.",
+      "detail_en": "Electrical blueprints, low and medium voltage installations, technical supervision."
+    }
+  ],
+  "education": [
+    {
+      "id": "edu1",
+      "year_range": "2017 — 2024",
+      "name": "UTN — FRT",
+      "degree": "Ingeniería en Sistemas de la Información",
+      "degree_en": "Information Systems Engineering"
+    },
+    {
+      "id": "edu2",
+      "year_range": "2006 — 2011",
+      "name": "Inst. Salesiano L. Massa",
+      "degree": "Técnico Electrónico",
+      "degree_en": "Electronics Technician"
+    }
+  ],
+  "certifications": [
+    {
+      "id": "c1",
+      "name": "Programación en Python Inicial",
+      "name_en": "Python Programming — Beginner",
+      "issuer": "UTN · 66 hs · 2022"
+    },
+    {
+      "id": "c2",
+      "name": "Learning Data Science: Understanding the Basics",
+      "name_en": "Learning Data Science: Understanding the Basics",
+      "issuer": "LinkedIn Learning · 2024"
+    },
+    {
+      "id": "c3",
+      "name": "Principios de Inteligencia Artificial",
+      "name_en": "AI Fundamentals",
+      "issuer": "Digital House"
+    },
+    {
+      "id": "c4",
+      "name": "Inglés Intensivo A1 · A1.2",
+      "name_en": "Intensive English A1 · A1.2",
+      "issuer": "Instituto Rush · 168 hs · 2023–2024"
+    },
+    {
+      "id": "c5",
+      "name": "Ingeniería de Prompts · Gestión con IA",
+      "name_en": "Prompt Engineering · AI Project Management",
+      "issuer": "Formación continua"
+    }
+  ],
+  "skills": [
+    {
+      "id": "s1",
+      "title": "Python",
+      "title_en": "Python",
+      "items": "OOP · Flask · FastAPI · Tkinter · Web Scraping · Machine Learning"
+    },
+    {
+      "id": "s2",
+      "title": "Datos",
+      "title_en": "Data",
+      "items": "PostgreSQL · MySQL · SQL Server · SQLite · Power BI · Pandas · Jupyter"
+    },
+    {
+      "id": "s3",
+      "title": "IA & ML",
+      "title_en": "IA & ML",
+      "items": "OpenAI API · Ing. de Prompts · Data Science · Machine Learning"
+    },
+    {
+      "id": "s4",
+      "title": "Sistemas",
+      "title_en": "Systems",
+      "items": "Linux · Windows Admin · Redes TCP/IP · Hardware · VirtualBox"
+    },
+    {
+      "id": "s5",
+      "title": "Web",
+      "title_en": "Web",
+      "items": "HTML · CSS · JavaScript · Flask · Railway · Git · VS Code"
+    }
+  ],
+  "languages": [
+    {
+      "id": "l1",
+      "lang_name": "Español",
+      "level": "Nativo",
+      "level_en": "Native"
+    },
+    {
+      "id": "l2",
+      "lang_name": "Inglés",
+      "level": "A1.2 cert. · B1 en curso",
+      "level_en": "A1.2 cert. · B1 in progress"
+    },
+    {
+      "id": "l3",
+      "lang_name": "Alemán",
+      "level": "Básico",
+      "level_en": "Basic"
+    }
+  ]
+}

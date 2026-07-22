@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ info.full_name }} — Portfolio</title>
+  <meta name="description" content="Python Developer & IT Support | Tucumán, Argentina" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="#">JNCW</a>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+      <span>/</span>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+    <a class="nav-cta" href="mailto:{{ info.email }}">
+      <span data-es="Contacto" data-en="Contact">Contacto</span>
+    </a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-top">
+    <div class="hero-role" data-es="{{ info.role_es }}" data-en="{{ info.role_en }}">{{ info.role_es }}</div>
+    <div class="hero-location">{{ info.location }} · {{ info.year }}</div>
+  </div>
+  {% set parts = info.full_name.split(' ') %}
+  <h1 class="hero-name">
+    <span class="name-line">{{ parts[0] }} {{ parts[1] }}</span>
+    <span class="name-line name-line--mid">
+      <span class="avatar-slot">
+        {% if info.avatar_mode == 'photo' and info.photo_file %}
+          <img class="avatar-photo" src="{{ url_for('static', filename='img/' + info.photo_file) }}" alt="{{ info.full_name }}"/>
+        {% else %}
+          <span class="avatar-initials">{{ info.initials or 'NC' }}</span>
+        {% endif %}
+      </span>
+      <span>{{ parts[2] }}</span>
+    </span>
+    <span class="name-line">{{ parts[3] }}</span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-bio" data-es="{{ info.bio_es }}" data-en="{{ info.bio_en }}">{{ info.bio_es }}</p>
+    <div class="hero-links">
+      <a href="{{ info.github }}" target="_blank">GitHub ↗</a>
+      <a href="mailto:{{ info.email }}">{{ info.email }}</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+{% for project in projects %}
+<section class="section">
+  <div class="section-label">
+    <span>0{{ loop.index }}</span>
+    <span data-es="Proyecto" data-en="Project">Proyecto</span>
+  </div>
+  <div class="project-block">
+    <div class="project-header">
+      <div>
+        <div class="project-eyebrow" data-es="{{ project.eyebrow }}" data-en="{{ project.eyebrow_en }}">{{ project.eyebrow }}</div>
+        <h2 class="project-title">{{ project.name }}</h2>
+      </div>
+      {% if project.live %}
+      <span class="project-status"><span class="dot"></span>
+        <span data-es="En producción" data-en="Live">En producción</span>
+      </span>
+      {% endif %}
+    </div>
+    <p class="project-desc" data-es="{{ project.description }}" data-en="{{ project.desc_en }}">{{ project.description }}</p>
+    {% if project.phase1_title %}
+    <div class="project-phases">
+      <div class="phase">
+        <div class="phase-num">I</div>
+        <div class="phase-content">
+          <div class="phase-title" data-es="{{ project.phase1_title }}" data-en="{{ project.phase1_title_en }}">{{ project.phase1_title }}</div>
+          <div class="phase-sub" data-es="{{ project.phase1_sub }}" data-en="{{ project.phase1_sub_en }}">{{ project.phase1_sub }}</div>
+          <div class="phase-desc">{{ project.phase1_tech }}</div>
+        </div>
+      </div>
+      <div class="phase-arrow">→</div>
+      <div class="phase">
+        <div class="phase-num">II</div>
+        <div class="phase-content">
+          <div class="phase-title" data-es="{{ project.phase2_title }}" data-en="{{ project.phase2_title_en }}">{{ project.phase2_title }}</div>
+          <div class="phase-sub" data-es="{{ project.phase2_sub }}" data-en="{{ project.phase2_sub_en }}">{{ project.phase2_sub }}</div>
+          <div class="phase-desc">{{ project.phase2_tech }}</div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% if project.stats %}
+    <div class="project-stats">
+      {% for s in project.stats %}
+      <div class="stat">
+        <div class="stat-num">{{ s.num }}</div>
+        <div class="stat-label" data-es="{{ s.label }}" data-en="{{ s.label_en }}">{{ s.label }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if project.images %}
+    {% set tabs = project.images | map(attribute='tab') | unique | list %}
+    <div class="gallery">
+      {% if tabs|length > 1 %}
+      <div class="gallery-tabs">
+        {% for tab in tabs %}
+        <button class="gtab {% if loop.first %}active{% endif %}"
+                onclick="switchGallery('gal-{{ project.id }}-{{ tab }}',this,'gal-{{ project.id }}')">
+          <span>{{ tab | title }}</span>
+        </button>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% for tab in tabs %}
+      <div class="gallery-grid" id="gal-{{ project.id }}-{{ tab }}" {% if not loop.first %}style="display:none"{% endif %}>
+        {% for img in project.images if img.tab == tab %}
+        <figure class="shot {% if img.wide %}shot--wide{% endif %}" onclick="openLightbox('{{ img_url(img.filename) }}')">
+          <img src="{{ img_url(img.filename) }}" alt="{{ img.caption }}" loading="lazy"/>
+          {% if img.caption %}
+          <figcaption data-es="{{ img.caption }}" data-en="{{ img.caption_en or img.caption }}">{{ img.caption }}</figcaption>
+          {% endif %}
+        </figure>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+<div class="divider"></div>
+{% endfor %}
+
+<section class="section">
+  <div class="section-label"><span>{{ '%02d'%(projects|length+1) }}</span><span data-es="Habilidades" data-en="Skills">Habilidades</span></div>
+  <div class="skills-grid">
+    {% for s in skills %}
+    <div class="skill-group">
+      <div class="skill-group-title" data-es="{{ s.title }}" data-en="{{ s.title_en }}">{{ s.title }}</div>
+      <div class="skill-group-items">{{ s.items }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-label"><span>{{ '%02d'%(projects|length+2) }}</span><span data-es="Experiencia" data-en="Experience">Experiencia</span></div>
+  <div class="exp-list">
+    {% for e in experience %}
+    <div class="exp-item">
+      <div class="exp-left">
+        <div class="exp-years">{{ e.years }}</div>
+        <div class="exp-company" data-es="{{ e.company }}" data-en="{{ e.company_en }}">{{ e.company }}</div>
+      </div>
+      <div class="exp-right">
+        <div class="exp-role" data-es="{{ e.role }}" data-en="{{ e.role_en }}">{{ e.role }}</div>
+        <div class="exp-detail" data-es="{{ e.detail }}" data-en="{{ e.detail_en }}">{{ e.detail }}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-label"><span>{{ '%02d'%(projects|length+3) }}</span><span data-es="Formación" data-en="Education">Formación</span></div>
+  <div class="edu-grid">
+    <div class="edu-col">
+      <div class="edu-col-title" data-es="Educación" data-en="Education">Educación</div>
+      {% for e in education %}
+      <div class="edu-item">
+        <div class="edu-year">{{ e.year_range }}</div>
+        <div class="edu-name">{{ e.name }}</div>
+        <div class="edu-degree" data-es="{{ e.degree }}" data-en="{{ e.degree_en }}">{{ e.degree }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="edu-col">
+      <div class="edu-col-title" data-es="Certificaciones" data-en="Certifications">Certificaciones</div>
+      <div class="cert-list">
+        {% for c in certifications %}
+        <div class="cert-item">
+          <span class="cert-dot">—</span>
+          <div>
+            <div class="cert-name" data-es="{{ c.name }}" data-en="{{ c.name_en }}">{{ c.name }}</div>
+            <div class="cert-issuer">{{ c.issuer }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section class="section section--sm">
+  <div class="section-label"><span>{{ '%02d'%(projects|length+4) }}</span><span data-es="Idiomas" data-en="Languages">Idiomas</span></div>
+  <div class="lang-row">
+    {% for l in languages %}
+    <div class="lang-item">
+      <span class="lang-name">{{ l.lang_name }}</span>
+      <span class="lang-level" data-es="{{ l.level }}" data-en="{{ l.level_en }}">{{ l.level }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-left">
+    <span>{{ info.full_name }}</span>
+    <span class="footer-sep">·</span>
+    <a href="{{ info.github }}" target="_blank">GitHub</a>
+  </div>
+  <a class="footer-mail" href="mailto:{{ info.email }}">{{ info.email }}</a>
+</footer>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt=""/>
+</div>
+
+<script src="{{ url_for('static', filename='js/lang.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+function switchGallery(id,btn,prefix){
+  document.querySelectorAll('[id^="'+prefix+'"]').forEach(g=>g.style.display='none');
+  document.getElementById(id).style.display='grid';
+  btn.closest('.gallery-tabs').querySelectorAll('.gtab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('open');}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{% extends 'admin/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="stats">
+  <div class="sc"><div class="sc-n">{{ pcount }}</div><div class="sc-l">Proyectos</div></div>
+  <div class="sc"><div class="sc-n">{{ icount }}</div><div class="sc-l">Imágenes</div></div>
+  <div class="sc"><div class="sc-n">{{ ecount }}</div><div class="sc-l">Experiencias</div></div>
+  <div class="sc"><div class="sc-n">{{ ccount }}</div><div class="sc-l">Certificaciones</div></div>
+</div>
+<div class="card">
+  <div class="ctitle">Acciones rápidas</div>
+  <div style="display:flex;flex-wrap:wrap;gap:.6rem">
+    <a href="{{ url_for('admin_info') }}" class="btn btn-bk">👤 Info personal</a>
+    <a href="{{ url_for('project_new') }}" class="btn btn-ac">➕ Nuevo proyecto</a>
+    <a href="{{ url_for('admin_experience') }}" class="btn btn-gh">💼 Experiencia</a>
+    <a href="{{ url_for('admin_certifications') }}" class="btn btn-gh">📜 Certificaciones</a>
+    <a href="{{ url_for('admin_skills') }}" class="btn btn-gh">⚡ Habilidades</a>
+  </div>
+</div>
+<div class="card">
+  <div class="ctitle">Guía</div>
+  <div style="font-size:13px;color:#6b7280;line-height:2.1">
+    <b style="color:#111">👤 Info personal</b> — Nombre, bio, contacto, foto<br>
+    <b style="color:#111">🗂️ Proyectos</b> — Crear/editar proyectos y subir imágenes<br>
+    <b style="color:#111">💼 Experiencia</b> — Historial laboral<br>
+    <b style="color:#111">🎓 Educación</b> — Títulos y carreras<br>
+    <b style="color:#111">📜 Certificaciones</b> — Cursos y certificados<br>
+    <b style="color:#111">⚡ Habilidades</b> — Grupos de tecnologías<br>
+    <b style="color:#111">🌐 Idiomas</b> — Idiomas con nivel
+  </div>
+</div>
+{% endblock %}

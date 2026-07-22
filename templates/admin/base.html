@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin — {% block title %}{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bk:#0a0a0a;--wh:#fafafa;--gr:#6b7280;--lt:#f3f4f6;--bd:#e5e7eb;--ac:#1d4ed8;--re:#dc2626;--gn:#16a34a;--r:8px}
+body{font-family:Inter,sans-serif;background:var(--lt);color:var(--bk);font-size:14px;display:flex;min-height:100vh}
+.sb{width:210px;background:var(--bk);color:#fff;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.sb-logo{padding:1.4rem 1.2rem;font-size:15px;font-weight:700;border-bottom:1px solid #222}
+.sb-logo span{font-size:11px;font-weight:400;color:#555;display:block;margin-top:2px}
+.sb-nav{flex:1;padding:.5rem 0}
+.sb-sec{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#444;padding:.7rem 1.2rem .25rem}
+.sb a{display:flex;align-items:center;gap:.6rem;padding:.6rem 1.2rem;font-size:13px;color:#888;text-decoration:none;transition:all .15s}
+.sb a:hover,.sb a.on{color:#fff;background:#1a1a1a}
+.sb a.on{border-left:3px solid var(--ac);padding-left:calc(1.2rem - 3px)}
+.sb-ft{padding:1rem 1.2rem;border-top:1px solid #222}
+.sb-ft a{font-size:12px;color:#555;text-decoration:none;display:block;margin-bottom:.35rem}
+.sb-ft a:hover{color:#fff}
+.main{margin-left:210px;flex:1;display:flex;flex-direction:column}
+.topbar{background:#fff;border-bottom:1px solid var(--bd);padding:.9rem 1.8rem;display:flex;align-items:center;justify-content:space-between}
+.topbar h1{font-size:16px;font-weight:600}
+.content{padding:1.8rem;max-width:960px}
+.alert{padding:.8rem 1rem;border-radius:var(--r);margin-bottom:1.2rem;font-size:13.5px}
+.alert-success{background:#f0fdf4;color:var(--gn);border:1px solid #bbf7d0}
+.alert-info{background:#eff6ff;color:var(--ac);border:1px solid #bfdbfe}
+.card{background:#fff;border:1px solid var(--bd);border-radius:var(--r);padding:1.4rem;margin-bottom:1.4rem}
+.ctitle{font-size:14px;font-weight:600;margin-bottom:1.1rem;padding-bottom:.7rem;border-bottom:1px solid var(--bd)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.9rem}
+.full{grid-column:1/-1}
+.f{display:flex;flex-direction:column;gap:.3rem}
+.f label{font-size:11.5px;font-weight:500;color:var(--gr)}
+.f input,.f textarea,.f select{width:100%;padding:.55rem .75rem;border:1px solid var(--bd);border-radius:6px;font-family:Inter,sans-serif;font-size:13.5px;color:var(--bk);outline:none}
+.f input:focus,.f textarea:focus{border-color:var(--ac)}
+.f textarea{resize:vertical;min-height:75px}
+.f .hint{font-size:11px;color:var(--gr)}
+.btn{display:inline-flex;align-items:center;gap:.35rem;padding:.5rem 1rem;border-radius:6px;font-family:Inter,sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;border:none;transition:opacity .15s}
+.btn-bk{background:var(--bk);color:#fff}.btn-bk:hover{opacity:.8}
+.btn-ac{background:var(--ac);color:#fff}.btn-ac:hover{opacity:.8}
+.btn-gh{background:var(--lt);color:var(--bk);border:1px solid var(--bd)}.btn-gh:hover{background:var(--bd)}
+.btn-re{background:var(--re);color:#fff}.btn-re:hover{opacity:.8}
+.btn-sm{padding:.3rem .7rem;font-size:12px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--gr);padding:.65rem .9rem;border-bottom:1px solid var(--bd);background:var(--lt)}
+td{padding:.8rem .9rem;border-bottom:1px solid var(--bd);font-size:13.5px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500}
+.bg{background:#dcfce7;color:#166534}.bb{background:var(--lt);color:var(--gr)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin-bottom:1.8rem}
+.sc{background:#fff;border:1px solid var(--bd);border-radius:var(--r);padding:1.1rem}
+.sc-n{font-size:26px;font-weight:600;line-height:1}.sc-l{font-size:12px;color:var(--gr);margin-top:.25rem}
+.ig{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.9rem;margin-top:1rem}
+.ith{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;background:var(--lt)}
+.ith img{width:100%;height:110px;object-fit:cover;display:block}
+.ith-b{padding:.55rem}
+.ith-b input,.ith-b select{width:100%;margin-bottom:.35rem;padding:.3rem .5rem;border:1px solid var(--bd);border-radius:4px;font-size:12px}
+.uz{border:2px dashed var(--bd);border-radius:var(--r);padding:1.8rem;text-align:center;color:var(--gr);font-size:13px;cursor:pointer}
+.uz:hover{border-color:var(--ac);color:var(--ac)}
+@media(max-width:700px){.sb{width:52px}.sb-logo span,.sb a span,.sb-sec,.sb-ft{display:none}.main{margin-left:52px}.fg,.fg3{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
+</style></head><body>
+<aside class="sb">
+  <div class="sb-logo">JNCW<span>Portfolio Admin</span></div>
+  <nav class="sb-nav">
+    <div class="sb-sec">General</div>
+    <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint=='dashboard' %}on{% endif %}">📊 <span>Dashboard</span></a>
+    <a href="{{ url_for('admin_info') }}" class="{% if request.endpoint=='admin_info' %}on{% endif %}">👤 <span>Info personal</span></a>
+    <div class="sb-sec">Contenido</div>
+    <a href="{{ url_for('admin_projects') }}" class="{% if 'project' in request.endpoint %}on{% endif %}">🗂️ <span>Proyectos</span></a>
+    <a href="{{ url_for('admin_experience') }}" class="{% if request.endpoint=='admin_experience' %}on{% endif %}">💼 <span>Experiencia</span></a>
+    <a href="{{ url_for('admin_education') }}" class="{% if request.endpoint=='admin_education' %}on{% endif %}">🎓 <span>Educación</span></a>
+    <a href="{{ url_for('admin_certifications') }}" class="{% if request.endpoint=='admin_certifications' %}on{% endif %}">📜 <span>Certificaciones</span></a>
+    <a href="{{ url_for('admin_skills') }}" class="{% if request.endpoint=='admin_skills' %}on{% endif %}">⚡ <span>Habilidades</span></a>
+    <a href="{{ url_for('admin_languages') }}" class="{% if request.endpoint=='admin_languages' %}on{% endif %}">🌐 <span>Idiomas</span></a>
+  </nav>
+  <div class="sb-ft">
+    <a href="{{ url_for('index') }}" target="_blank">← Ver portfolio</a>
+    <a href="{{ url_for('admin_logout') }}">Cerrar sesión</a>
+  </div>
+</aside>
+<div class="main">
+  <div class="topbar">
+    <h1>{% block title %}{% endblock %}</h1>
+    <a href="{{ url_for('index') }}" target="_blank" class="btn btn-gh btn-sm">Ver portfolio ↗</a>
+  </div>
+  <div class="content">
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% for cat,msg in msgs %}<div class="alert alert-{{ 'success' if 'success' in cat else 'info' }}">{{ msg }}</div>{% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+</div>
+</body></html>

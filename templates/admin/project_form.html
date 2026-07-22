@@ -1,0 +1,97 @@
+{% extends 'admin/base.html' %}
+{% block title %}{% if p %}Editar {{ p.name }}{% else %}Nuevo proyecto{% endif %}{% endblock %}
+{% block content %}
+<form method="POST">
+  <div class="card">
+    <div class="ctitle">General</div>
+    <div class="fg">
+      <div class="f"><label>Nombre (es)</label><input name="name" value="{{ p.name if p else '' }}" required/></div>
+      <div class="f"><label>Nombre (en)</label><input name="name_en" value="{{ p.name_en if p else '' }}"/></div>
+      <div class="f"><label>Eyebrow (es)</label><input name="eyebrow" value="{{ p.eyebrow if p else '' }}" placeholder="Producto propio"/></div>
+      <div class="f"><label>Eyebrow (en)</label><input name="eyebrow_en" value="{{ p.eyebrow_en if p else '' }}" placeholder="Own product"/></div>
+      <div class="f full"><label>Descripción (es)</label><textarea name="description">{{ p.description if p else '' }}</textarea></div>
+      <div class="f full"><label>Descripción (en)</label><textarea name="desc_en">{{ p.desc_en if p else '' }}</textarea></div>
+      <div class="f" style="flex-direction:row;align-items:center;gap:.5rem">
+        <input type="checkbox" name="live" {% if not p or p.live %}checked{% endif %} style="width:auto"/>
+        <label style="margin:0">En producción (badge verde)</label>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctitle">Fases de evolución (opcional)</div>
+    <div class="fg">
+      <div class="f"><label>Fase 1 título (es)</label><input name="phase1_title" value="{{ p.phase1_title if p else '' }}"/></div>
+      <div class="f"><label>Fase 1 título (en)</label><input name="phase1_title_en" value="{{ p.phase1_title_en if p else '' }}"/></div>
+      <div class="f"><label>Fase 1 subtítulo (es)</label><input name="phase1_sub" value="{{ p.phase1_sub if p else '' }}"/></div>
+      <div class="f"><label>Fase 1 subtítulo (en)</label><input name="phase1_sub_en" value="{{ p.phase1_sub_en if p else '' }}"/></div>
+      <div class="f full"><label>Fase 1 tecnologías</label><input name="phase1_tech" value="{{ p.phase1_tech if p else '' }}" placeholder="Python · Tkinter · SQLite"/></div>
+      <div class="f"><label>Fase 2 título (es)</label><input name="phase2_title" value="{{ p.phase2_title if p else '' }}"/></div>
+      <div class="f"><label>Fase 2 título (en)</label><input name="phase2_title_en" value="{{ p.phase2_title_en if p else '' }}"/></div>
+      <div class="f"><label>Fase 2 subtítulo (es)</label><input name="phase2_sub" value="{{ p.phase2_sub if p else '' }}"/></div>
+      <div class="f"><label>Fase 2 subtítulo (en)</label><input name="phase2_sub_en" value="{{ p.phase2_sub_en if p else '' }}"/></div>
+      <div class="f full"><label>Fase 2 tecnologías</label><input name="phase2_tech" value="{{ p.phase2_tech if p else '' }}" placeholder="Flask · PostgreSQL · Railway"/></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctitle">Stats (números destacados)</div>
+    {% set stats = p.stats if p and p.stats else [{},{},{},{}] %}
+    {% for i in range(4) %}
+    <div class="fg3" style="margin-bottom:.7rem">
+      <div class="f"><label>Número {{ i+1 }}</label><input name="s{{ i+1 }}n" value="{{ stats[i].num if i < stats|length else '' }}" placeholder="33+"/></div>
+      <div class="f"><label>Etiqueta (es)</label><input name="s{{ i+1 }}l" value="{{ stats[i].label if i < stats|length else '' }}" placeholder="versiones"/></div>
+      <div class="f"><label>Etiqueta (en)</label><input name="s{{ i+1 }}le" value="{{ stats[i].label_en if i < stats|length else '' }}" placeholder="versions"/></div>
+    </div>
+    {% endfor %}
+  </div>
+  <div style="display:flex;gap:.6rem;margin-bottom:2rem">
+    <button type="submit" class="btn btn-bk">💾 Guardar</button>
+    <a href="{{ url_for('admin_projects') }}" class="btn btn-gh">Cancelar</a>
+  </div>
+</form>
+
+{% if p %}
+<div class="card">
+  <div class="ctitle">Imágenes del proyecto</div>
+  <form method="POST" action="{{ url_for('image_upload', pid=p.id) }}" enctype="multipart/form-data">
+    <div class="f" style="max-width:200px;margin-bottom:.8rem">
+      <label>Tab de galería</label>
+      <select name="tab"><option value="desktop">Desktop</option><option value="web" selected>Web</option><option value="otro">Otro</option></select>
+    </div>
+    <div class="uz" onclick="document.getElementById('fu').click()">
+      📁 Clic o arrastrá imágenes (JPG, PNG, WEBP)
+      <input type="file" id="fu" name="images" multiple accept="image/*" style="display:none" onchange="this.form.submit()"/>
+    </div>
+  </form>
+  {% if p.images %}
+  <div class="ig">
+    {% for img in p.images %}
+    <div class="ith">
+      <img src="{{ img_url(img.filename) }}" alt="{{ img.caption }}"/>
+      <div class="ith-b">
+        <form method="POST" action="{{ url_for('image_update', pid=p.id, iid=img.id) }}">
+          <input name="caption" value="{{ img.caption }}" placeholder="Caption (es)"/>
+          <input name="caption_en" value="{{ img.caption_en }}" placeholder="Caption (en)"/>
+          <select name="tab">
+            <option value="desktop" {% if img.tab=='desktop' %}selected{% endif %}>Desktop</option>
+            <option value="web" {% if img.tab=='web' %}selected{% endif %}>Web</option>
+            <option value="otro" {% if img.tab=='otro' %}selected{% endif %}>Otro</option>
+          </select>
+          <div style="display:flex;align-items:center;gap:.35rem;margin-bottom:.35rem;font-size:12px">
+            <input type="checkbox" name="wide" {% if img.wide %}checked{% endif %} style="width:auto"/> Ancho completo
+          </div>
+          <button type="submit" class="btn btn-gh btn-sm" style="width:100%">💾 Guardar</button>
+        </form>
+        <form method="POST" action="{{ url_for('image_update', pid=p.id, iid=img.id) }}" onsubmit="return confirm('¿Eliminar?')" style="margin-top:.3rem">
+          <input type="hidden" name="action" value="delete"/>
+          <button type="submit" class="btn btn-re btn-sm" style="width:100%">🗑️ Eliminar</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="text-align:center;padding:1.5rem;color:#9ca3af;font-size:13px">Sin imágenes aún.</div>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

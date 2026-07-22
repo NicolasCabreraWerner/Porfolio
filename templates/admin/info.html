@@ -1,0 +1,40 @@
+{% extends 'admin/base.html' %}
+{% block title %}Info personal{% endblock %}
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+  <div class="card">
+    <div class="ctitle">Datos principales</div>
+    <div class="fg">
+      <div class="f"><label>Nombre completo (4 palabras)</label><input name="full_name" value="{{ info.full_name }}"/><span class="hint">Ej: Juan Nicolás Cabrera Werner</span></div>
+      <div class="f"><label>Iniciales avatar</label><input name="initials" value="{{ info.initials }}"/></div>
+      <div class="f"><label>Rol (español)</label><input name="role_es" value="{{ info.role_es }}"/></div>
+      <div class="f"><label>Rol (inglés)</label><input name="role_en" value="{{ info.role_en }}"/></div>
+      <div class="f"><label>Ubicación</label><input name="location" value="{{ info.location }}"/></div>
+      <div class="f"><label>Año</label><input name="year" value="{{ info.year }}"/></div>
+      <div class="f full"><label>Bio (español)</label><textarea name="bio_es">{{ info.bio_es }}</textarea></div>
+      <div class="f full"><label>Bio (inglés)</label><textarea name="bio_en">{{ info.bio_en }}</textarea></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctitle">Contacto</div>
+    <div class="fg">
+      <div class="f"><label>Email</label><input type="email" name="email" value="{{ info.email }}"/></div>
+      <div class="f"><label>Teléfono</label><input name="phone" value="{{ info.phone }}"/></div>
+      <div class="f full"><label>GitHub URL</label><input name="github" value="{{ info.github }}"/></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctitle">Foto de perfil</div>
+    {% if info.avatar_mode == 'photo' and info.photo_file %}
+    <img src="{{ url_for('static', filename='img/' + info.photo_file) }}" style="width:90px;height:90px;border-radius:50%;object-fit:cover;margin-bottom:1rem;border:2px solid #e5e7eb"/>
+    {% else %}
+    <div style="width:90px;height:90px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:26px;color:#9ca3af;margin-bottom:1rem;border:2px solid #e5e7eb">{{ info.initials }}</div>
+    {% endif %}
+    <div class="f" style="max-width:380px">
+      <label>Subir foto (JPG, PNG, WEBP — mín 400×400px, fondo neutro)</label>
+      <input type="file" name="photo" accept="image/*"/>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-bk">💾 Guardar cambios</button>
+</form>
+{% endblock %}
