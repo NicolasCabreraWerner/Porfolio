@@ -29,3 +29,6 @@ git add -A
 git commit -m "Portfolio profesional V2 - Application Support y AI"
 git push origin main
 ```
+
+
+- Foto de perfil actualizada con retrato profesional en static/img/profile.png y portfolio.json configurado para usarla.

@@ -11,8 +11,8 @@
     "github": "https://github.com/NicolasCabreraWerner",
     "phone": "381-2201696",
     "initials": "NC",
-    "avatar_mode": "initials",
-    "photo_file": "",
+    "avatar_mode": "photo",
+    "photo_file": "profile.png",
     "target_roles_es": "Application Support · Technical Support L2/L3 · Implementation · Solutions · AI Automation",
     "target_roles_en": "Application Support · Technical Support L2/L3 · Implementation · Solutions · AI Automation"
   },
