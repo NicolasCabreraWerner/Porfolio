@@ -1,26 +1,43 @@
-{% extends 'admin/base.html' %}{% block title %}Habilidades{% endblock %}{% block content %}
-<div class="card"><div class="ctitle">➕ Agregar grupo</div>
-<form method="POST"><input type="hidden" name="action" value="add"/>
-<div class="fg">
-  <div class="f"><label>Título (es)</label><input name="title" placeholder="Python"/></div>
-  <div class="f"><label>Título (en)</label><input name="title_en" placeholder="Python"/></div>
-  <div class="f full"><label>Items (separados por ·)</label><input name="items" placeholder="OOP · Flask · Tkinter"/></div>
+{% extends 'admin/base_admin.html' %}
+{% block title %}Habilidades{% endblock %}
+{% block topbar_title %}Habilidades técnicas{% endblock %}
+{% block content %}
+
+<div class="card">
+  <div class="card-title">➕ Agregar grupo de habilidades</div>
+  <form method="POST">
+    <input type="hidden" name="action" value="add"/>
+    <div class="form-grid">
+      <div class="field"><label>Título (es)</label><input type="text" name="title" placeholder="Python"/></div>
+      <div class="field"><label>Título (en)</label><input type="text" name="title_en" placeholder="Python"/></div>
+      <div class="field form-full"><label>Items (separados por ·)</label><input type="text" name="items" placeholder="OOP · Flask · Tkinter · Machine Learning"/></div>
+      <div class="field"><label>Orden</label><input type="number" name="sort_order" value="0"/></div>
+    </div>
+    <button type="submit" class="btn btn-accent" style="margin-top:.75rem">➕ Agregar</button>
+  </form>
 </div>
-<button type="submit" class="btn btn-ac" style="margin-top:.7rem">➕ Agregar</button>
-</form></div>
+
 {% for s in items %}
-<div class="card"><div class="ctitle">{{ s.title }}</div>
-<form method="POST"><input type="hidden" name="action" value="update"/><input type="hidden" name="id" value="{{ s.id }}"/>
-<div class="fg">
-  <div class="f"><label>Título (es)</label><input name="title" value="{{ s.title }}"/></div>
-  <div class="f"><label>Título (en)</label><input name="title_en" value="{{ s.title_en }}"/></div>
-  <div class="f full"><label>Items</label><input name="items" value="{{ s.items }}"/></div>
+<div class="card">
+  <div class="card-title">{{ s.title }}</div>
+  <form method="POST">
+    <input type="hidden" name="action" value="update"/>
+    <input type="hidden" name="id" value="{{ s.id }}"/>
+    <div class="form-grid">
+      <div class="field"><label>Título (es)</label><input type="text" name="title" value="{{ s.title }}"/></div>
+      <div class="field"><label>Título (en)</label><input type="text" name="title_en" value="{{ s.title_en }}"/></div>
+      <div class="field form-full"><label>Items</label><input type="text" name="items" value="{{ s.items }}"/></div>
+      <div class="field"><label>Orden</label><input type="number" name="sort_order" value="{{ s.sort_order }}"/></div>
+    </div>
+    <div style="display:flex;gap:.5rem;margin-top:.75rem">
+      <button type="submit" class="btn btn-primary">💾 Guardar</button>
+      <button type="submit" form="del-sk-{{ s.id }}" class="btn btn-danger">🗑️</button>
+    </div>
+  </form>
+  <form id="del-sk-{{ s.id }}" method="POST" onsubmit="return confirm('¿Eliminar?')">
+    <input type="hidden" name="action" value="delete"/><input type="hidden" name="id" value="{{ s.id }}"/>
+  </form>
 </div>
-<div style="display:flex;gap:.5rem;margin-top:.7rem">
-  <button type="submit" class="btn btn-bk">💾 Guardar</button>
-  <button type="submit" form="ds{{ s.id }}" class="btn btn-re">🗑️ Eliminar</button>
-</div></form>
-<form id="ds{{ s.id }}" method="POST" onsubmit="return confirm('¿Eliminar?')">
-  <input type="hidden" name="action" value="delete"/><input type="hidden" name="id" value="{{ s.id }}"/>
-</form></div>
-{% endfor %}{% endblock %}
+{% endfor %}
+
+{% endblock %}

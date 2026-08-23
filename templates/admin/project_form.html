@@ -1,97 +1,176 @@
-{% extends 'admin/base.html' %}
-{% block title %}{% if p %}Editar {{ p.name }}{% else %}Nuevo proyecto{% endif %}{% endblock %}
+{% extends 'admin/base_admin.html' %}
+{% block title %}{% if project %}Editar {{ project.name }}{% else %}Nuevo proyecto{% endif %}{% endblock %}
+{% block topbar_title %}{% if project %}Editar proyecto{% else %}Nuevo proyecto{% endif %}{% endblock %}
 {% block content %}
+
+{% set p = project or {} %}
+
 <form method="POST">
   <div class="card">
-    <div class="ctitle">General</div>
-    <div class="fg">
-      <div class="f"><label>Nombre (es)</label><input name="name" value="{{ p.name if p else '' }}" required/></div>
-      <div class="f"><label>Nombre (en)</label><input name="name_en" value="{{ p.name_en if p else '' }}"/></div>
-      <div class="f"><label>Eyebrow (es)</label><input name="eyebrow" value="{{ p.eyebrow if p else '' }}" placeholder="Producto propio"/></div>
-      <div class="f"><label>Eyebrow (en)</label><input name="eyebrow_en" value="{{ p.eyebrow_en if p else '' }}" placeholder="Own product"/></div>
-      <div class="f full"><label>Descripción (es)</label><textarea name="description">{{ p.description if p else '' }}</textarea></div>
-      <div class="f full"><label>Descripción (en)</label><textarea name="desc_en">{{ p.desc_en if p else '' }}</textarea></div>
-      <div class="f" style="flex-direction:row;align-items:center;gap:.5rem">
-        <input type="checkbox" name="live" {% if not p or p.live %}checked{% endif %} style="width:auto"/>
-        <label style="margin:0">En producción (badge verde)</label>
+    <div class="card-title">Información general</div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Nombre (español)</label>
+        <input type="text" name="name" value="{{ p.get('name','') }}" required/>
+      </div>
+      <div class="field">
+        <label>Nombre (inglés)</label>
+        <input type="text" name="name_en" value="{{ p.get('name_en','') }}"/>
+      </div>
+      <div class="field">
+        <label>Eyebrow (español)</label>
+        <input type="text" name="eyebrow" value="{{ p.get('eyebrow','') }}" placeholder="Producto propio"/>
+      </div>
+      <div class="field">
+        <label>Eyebrow (inglés)</label>
+        <input type="text" name="eyebrow_en" value="{{ p.get('eyebrow_en','') }}" placeholder="Own product"/>
+      </div>
+      <div class="field form-full">
+        <label>Descripción (español)</label>
+        <textarea name="description" rows="4">{{ p.get('description','') }}</textarea>
+      </div>
+      <div class="field form-full">
+        <label>Descripción (inglés)</label>
+        <textarea name="desc_en" rows="4">{{ p.get('desc_en','') }}</textarea>
+      </div>
+      <div class="field" style="display:flex;flex-direction:row;align-items:center;gap:.6rem">
+        <input type="checkbox" name="live" id="live" {% if p.get('live', True) %}checked{% endif %} style="width:auto"/>
+        <label for="live" style="margin:0">En producción (badge verde)</label>
+      </div>
+      <div class="field">
+        <label>Orden</label>
+        <input type="number" name="sort_order" value="{{ p.get('sort_order', 0) }}" min="0"/>
       </div>
     </div>
   </div>
+
   <div class="card">
-    <div class="ctitle">Fases de evolución (opcional)</div>
-    <div class="fg">
-      <div class="f"><label>Fase 1 título (es)</label><input name="phase1_title" value="{{ p.phase1_title if p else '' }}"/></div>
-      <div class="f"><label>Fase 1 título (en)</label><input name="phase1_title_en" value="{{ p.phase1_title_en if p else '' }}"/></div>
-      <div class="f"><label>Fase 1 subtítulo (es)</label><input name="phase1_sub" value="{{ p.phase1_sub if p else '' }}"/></div>
-      <div class="f"><label>Fase 1 subtítulo (en)</label><input name="phase1_sub_en" value="{{ p.phase1_sub_en if p else '' }}"/></div>
-      <div class="f full"><label>Fase 1 tecnologías</label><input name="phase1_tech" value="{{ p.phase1_tech if p else '' }}" placeholder="Python · Tkinter · SQLite"/></div>
-      <div class="f"><label>Fase 2 título (es)</label><input name="phase2_title" value="{{ p.phase2_title if p else '' }}"/></div>
-      <div class="f"><label>Fase 2 título (en)</label><input name="phase2_title_en" value="{{ p.phase2_title_en if p else '' }}"/></div>
-      <div class="f"><label>Fase 2 subtítulo (es)</label><input name="phase2_sub" value="{{ p.phase2_sub if p else '' }}"/></div>
-      <div class="f"><label>Fase 2 subtítulo (en)</label><input name="phase2_sub_en" value="{{ p.phase2_sub_en if p else '' }}"/></div>
-      <div class="f full"><label>Fase 2 tecnologías</label><input name="phase2_tech" value="{{ p.phase2_tech if p else '' }}" placeholder="Flask · PostgreSQL · Railway"/></div>
+    <div class="card-title">Fases de evolución (opcional)</div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Fase 1 — Título (es)</label>
+        <input type="text" name="phase1_title" value="{{ p.get('phase1_title','') }}"/>
+      </div>
+      <div class="field">
+        <label>Fase 1 — Título (en)</label>
+        <input type="text" name="phase1_title_en" value="{{ p.get('phase1_title_en','') }}"/>
+      </div>
+      <div class="field">
+        <label>Fase 1 — Subtítulo (es)</label>
+        <input type="text" name="phase1_sub" value="{{ p.get('phase1_sub','') }}"/>
+      </div>
+      <div class="field">
+        <label>Fase 1 — Subtítulo (en)</label>
+        <input type="text" name="phase1_sub_en" value="{{ p.get('phase1_sub_en','') }}"/>
+      </div>
+      <div class="field form-full">
+        <label>Fase 1 — Tecnologías</label>
+        <input type="text" name="phase1_tech" value="{{ p.get('phase1_tech','') }}" placeholder="Python · Tkinter · SQLite"/>
+      </div>
+      <div class="field">
+        <label>Fase 2 — Título (es)</label>
+        <input type="text" name="phase2_title" value="{{ p.get('phase2_title','') }}"/>
+      </div>
+      <div class="field">
+        <label>Fase 2 — Título (en)</label>
+        <input type="text" name="phase2_title_en" value="{{ p.get('phase2_title_en','') }}"/>
+      </div>
+      <div class="field">
+        <label>Fase 2 — Subtítulo (es)</label>
+        <input type="text" name="phase2_sub" value="{{ p.get('phase2_sub','') }}"/>
+      </div>
+      <div class="field">
+        <label>Fase 2 — Subtítulo (en)</label>
+        <input type="text" name="phase2_sub_en" value="{{ p.get('phase2_sub_en','') }}"/>
+      </div>
+      <div class="field form-full">
+        <label>Fase 2 — Tecnologías</label>
+        <input type="text" name="phase2_tech" value="{{ p.get('phase2_tech','') }}" placeholder="Flask · PostgreSQL · Railway"/>
+      </div>
     </div>
   </div>
+
   <div class="card">
-    <div class="ctitle">Stats (números destacados)</div>
-    {% set stats = p.stats if p and p.stats else [{},{},{},{}] %}
-    {% for i in range(4) %}
-    <div class="fg3" style="margin-bottom:.7rem">
-      <div class="f"><label>Número {{ i+1 }}</label><input name="s{{ i+1 }}n" value="{{ stats[i].num if i < stats|length else '' }}" placeholder="33+"/></div>
-      <div class="f"><label>Etiqueta (es)</label><input name="s{{ i+1 }}l" value="{{ stats[i].label if i < stats|length else '' }}" placeholder="versiones"/></div>
-      <div class="f"><label>Etiqueta (en)</label><input name="s{{ i+1 }}le" value="{{ stats[i].label_en if i < stats|length else '' }}" placeholder="versions"/></div>
+    <div class="card-title">Stats (números destacados)</div>
+    {% for i in range(1,5) %}
+    <div class="form-grid-3" style="margin-bottom:.75rem">
+      <div class="field">
+        <label>Stat {{ i }} — Número</label>
+        <input type="text" name="stat{{ i }}_num" value="{{ p.get('stat' ~ i ~ '_num','') }}" placeholder="33+"/>
+      </div>
+      <div class="field">
+        <label>Etiqueta (es)</label>
+        <input type="text" name="stat{{ i }}_label" value="{{ p.get('stat' ~ i ~ '_label','') }}" placeholder="versiones"/>
+      </div>
+      <div class="field">
+        <label>Etiqueta (en)</label>
+        <input type="text" name="stat{{ i }}_label_en" value="{{ p.get('stat' ~ i ~ '_label_en','') }}" placeholder="versions"/>
+      </div>
     </div>
     {% endfor %}
   </div>
-  <div style="display:flex;gap:.6rem;margin-bottom:2rem">
-    <button type="submit" class="btn btn-bk">💾 Guardar</button>
-    <a href="{{ url_for('admin_projects') }}" class="btn btn-gh">Cancelar</a>
+
+  <div style="display:flex;gap:.75rem;margin-bottom:2rem">
+    <button type="submit" class="btn btn-primary">💾 Guardar proyecto</button>
+    <a href="{{ url_for('admin_projects') }}" class="btn btn-ghost">Cancelar</a>
   </div>
 </form>
 
-{% if p %}
+{% if project %}
+<!-- IMAGE MANAGEMENT -->
 <div class="card">
-  <div class="ctitle">Imágenes del proyecto</div>
-  <form method="POST" action="{{ url_for('image_upload', pid=p.id) }}" enctype="multipart/form-data">
-    <div class="f" style="max-width:200px;margin-bottom:.8rem">
-      <label>Tab de galería</label>
-      <select name="tab"><option value="desktop">Desktop</option><option value="web" selected>Web</option><option value="otro">Otro</option></select>
+  <div class="card-title">Imágenes del proyecto</div>
+
+  <form method="POST" action="{{ url_for('admin_image_upload', pid=project.id) }}" enctype="multipart/form-data">
+    <div class="form-grid" style="margin-bottom:1rem">
+      <div class="field">
+        <label>Tab de galería</label>
+        <select name="tab_group">
+          <option value="desktop">Desktop</option>
+          <option value="web">Web</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
     </div>
-    <div class="uz" onclick="document.getElementById('fu').click()">
-      📁 Clic o arrastrá imágenes (JPG, PNG, WEBP)
-      <input type="file" id="fu" name="images" multiple accept="image/*" style="display:none" onchange="this.form.submit()"/>
+    <div class="upload-zone" onclick="document.getElementById('img-upload').click()">
+      📁 Hacé clic o arrastrá imágenes aquí (JPG, PNG, WEBP)
+      <input type="file" id="img-upload" name="images" multiple accept="image/*" style="display:none" onchange="this.form.submit()"/>
     </div>
   </form>
-  {% if p.images %}
-  <div class="ig">
-    {% for img in p.images %}
-    <div class="ith">
-      <img src="{{ img_url(img.filename) }}" alt="{{ img.caption }}"/>
-      <div class="ith-b">
-        <form method="POST" action="{{ url_for('image_update', pid=p.id, iid=img.id) }}">
-          <input name="caption" value="{{ img.caption }}" placeholder="Caption (es)"/>
-          <input name="caption_en" value="{{ img.caption_en }}" placeholder="Caption (en)"/>
-          <select name="tab">
-            <option value="desktop" {% if img.tab=='desktop' %}selected{% endif %}>Desktop</option>
-            <option value="web" {% if img.tab=='web' %}selected{% endif %}>Web</option>
-            <option value="otro" {% if img.tab=='otro' %}selected{% endif %}>Otro</option>
+
+  {% if images %}
+  <div class="img-grid" style="margin-top:1.5rem">
+    {% for img in images %}
+    <div class="img-thumb">
+      {% set src = '/static/img/zentra/' + img.filename if img.filename in ['desktop-1.jpg','desktop-2.jpg','desktop-3.jpg','web-1.jpg','web-2.jpg','web-3.jpg','web-4.jpg','web-5.jpg'] else '/static/img/uploads/' + img.filename %}
+      <img src="{{ src }}" alt="{{ img.caption or '' }}"/>
+      <div class="img-thumb-body">
+        <form method="POST" action="{{ url_for('admin_image_update', iid=img.id) }}">
+          <input type="text" name="caption" value="{{ img.caption or '' }}" placeholder="Caption (es)"/>
+          <input type="text" name="caption_en" value="{{ img.caption_en or '' }}" placeholder="Caption (en)"/>
+          <select name="tab_group">
+            <option value="desktop" {% if img.tab_group=='desktop' %}selected{% endif %}>Desktop</option>
+            <option value="web" {% if img.tab_group=='web' %}selected{% endif %}>Web</option>
+            <option value="otro" {% if img.tab_group=='otro' %}selected{% endif %}>Otro</option>
           </select>
-          <div style="display:flex;align-items:center;gap:.35rem;margin-bottom:.35rem;font-size:12px">
-            <input type="checkbox" name="wide" {% if img.wide %}checked{% endif %} style="width:auto"/> Ancho completo
+          <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem">
+            <input type="checkbox" name="is_wide" {% if img.is_wide %}checked{% endif %} style="width:auto"/>
+            <span style="font-size:11px">Ancho completo</span>
           </div>
-          <button type="submit" class="btn btn-gh btn-sm" style="width:100%">💾 Guardar</button>
+          <input type="number" name="sort_order" value="{{ img.sort_order }}" placeholder="Orden" min="0"/>
+          <button type="submit" class="btn btn-ghost btn-sm" style="width:100%;margin-top:.4rem">💾 Guardar</button>
         </form>
-        <form method="POST" action="{{ url_for('image_update', pid=p.id, iid=img.id) }}" onsubmit="return confirm('¿Eliminar?')" style="margin-top:.3rem">
-          <input type="hidden" name="action" value="delete"/>
-          <button type="submit" class="btn btn-re btn-sm" style="width:100%">🗑️ Eliminar</button>
+        <form method="POST" action="{{ url_for('admin_image_delete', iid=img.id) }}" onsubmit="return confirm('¿Eliminar imagen?')" style="margin-top:.3rem">
+          <button type="submit" class="btn btn-danger btn-sm" style="width:100%">🗑️ Eliminar</button>
         </form>
       </div>
     </div>
     {% endfor %}
   </div>
   {% else %}
-  <div style="text-align:center;padding:1.5rem;color:#9ca3af;font-size:13px">Sin imágenes aún.</div>
+  <div style="text-align:center;padding:2rem;color:#9ca3af;font-size:13px">No hay imágenes. Subí algunas arriba.</div>
   {% endif %}
 </div>
 {% endif %}
+
 {% endblock %}

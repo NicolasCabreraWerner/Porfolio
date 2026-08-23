@@ -1,28 +1,48 @@
-{% extends 'admin/base.html' %}{% block title %}Educación{% endblock %}{% block content %}
-<div class="card"><div class="ctitle">➕ Agregar</div>
-<form method="POST"><input type="hidden" name="action" value="add"/>
-<div class="fg">
-  <div class="f"><label>Período</label><input name="year_range" placeholder="2017 — 2024"/></div>
-  <div class="f"><label>Institución</label><input name="name"/></div>
-  <div class="f"><label>Título (es)</label><input name="degree"/></div>
-  <div class="f"><label>Título (en)</label><input name="degree_en"/></div>
+{% extends 'admin/base_admin.html' %}
+{% block title %}Educación{% endblock %}
+{% block topbar_title %}Educación{% endblock %}
+{% block content %}
+
+<div class="card">
+  <div class="card-title">➕ Agregar educación</div>
+  <form method="POST">
+    <input type="hidden" name="action" value="add"/>
+    <div class="form-grid">
+      <div class="field"><label>Período</label><input type="text" name="year_range" placeholder="2017 — 2024"/></div>
+      <div class="field"><label>Orden</label><input type="number" name="sort_order" value="0"/></div>
+      <div class="field"><label>Institución</label><input type="text" name="name"/></div>
+      <div class="field"></div>
+      <div class="field"><label>Título/Carrera (es)</label><input type="text" name="degree"/></div>
+      <div class="field"><label>Título/Carrera (en)</label><input type="text" name="degree_en"/></div>
+    </div>
+    <button type="submit" class="btn btn-accent" style="margin-top:.75rem">➕ Agregar</button>
+  </form>
 </div>
-<button type="submit" class="btn btn-ac" style="margin-top:.7rem">➕ Agregar</button>
-</form></div>
+
 {% for e in items %}
-<div class="card"><div class="ctitle">{{ e.name }}</div>
-<form method="POST"><input type="hidden" name="action" value="update"/><input type="hidden" name="id" value="{{ e.id }}"/>
-<div class="fg">
-  <div class="f"><label>Período</label><input name="year_range" value="{{ e.year_range }}"/></div>
-  <div class="f"><label>Institución</label><input name="name" value="{{ e.name }}"/></div>
-  <div class="f"><label>Título (es)</label><input name="degree" value="{{ e.degree }}"/></div>
-  <div class="f"><label>Título (en)</label><input name="degree_en" value="{{ e.degree_en }}"/></div>
+<div class="card">
+  <div class="card-title">{{ e.name }} — {{ e.year_range }}</div>
+  <form method="POST">
+    <input type="hidden" name="action" value="update"/>
+    <input type="hidden" name="id" value="{{ e.id }}"/>
+    <div class="form-grid">
+      <div class="field"><label>Período</label><input type="text" name="year_range" value="{{ e.year_range }}"/></div>
+      <div class="field"><label>Orden</label><input type="number" name="sort_order" value="{{ e.sort_order }}"/></div>
+      <div class="field"><label>Institución</label><input type="text" name="name" value="{{ e.name }}"/></div>
+      <div class="field"></div>
+      <div class="field"><label>Título (es)</label><input type="text" name="degree" value="{{ e.degree }}"/></div>
+      <div class="field"><label>Título (en)</label><input type="text" name="degree_en" value="{{ e.degree_en }}"/></div>
+    </div>
+    <div style="display:flex;gap:.5rem;margin-top:.75rem">
+      <button type="submit" class="btn btn-primary">💾 Guardar</button>
+      <button type="submit" form="del-edu-{{ e.id }}" class="btn btn-danger">🗑️ Eliminar</button>
+    </div>
+  </form>
+  <form id="del-edu-{{ e.id }}" method="POST" onsubmit="return confirm('¿Eliminar?')">
+    <input type="hidden" name="action" value="delete"/>
+    <input type="hidden" name="id" value="{{ e.id }}"/>
+  </form>
 </div>
-<div style="display:flex;gap:.5rem;margin-top:.7rem">
-  <button type="submit" class="btn btn-bk">💾 Guardar</button>
-  <button type="submit" form="de{{ e.id }}" class="btn btn-re">🗑️ Eliminar</button>
-</div></form>
-<form id="de{{ e.id }}" method="POST" onsubmit="return confirm('¿Eliminar?')">
-  <input type="hidden" name="action" value="delete"/><input type="hidden" name="id" value="{{ e.id }}"/>
-</form></div>
-{% endfor %}{% endblock %}
+{% endfor %}
+
+{% endblock %}
