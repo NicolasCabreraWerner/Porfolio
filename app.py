@@ -131,6 +131,7 @@ def img_src(filename):
     return url_for('static', filename='img/uploads/' + filename)
 
 app.jinja_env.globals['img_src'] = img_src
+app.jinja_env.filters['img_src'] = img_src
 
 def image_to_data_uri(file_storage, max_w=1200, quality=78):
     """Redimensiona/comprime la imagen subida y la devuelve como data-URI
@@ -339,6 +340,41 @@ def admin_image_delete(pid, iid):
         proj['images'] = [i for i in proj['images'] if i['id']!=iid]
         save_data(data)
     flash('🗑️ Imagen eliminada','info')
+    return redirect(url_for('admin_project_edit', pid=pid))
+
+@app.route('/admin/projects/<pid>/images/<iid>/move', methods=['POST'])
+@login_required
+def admin_image_move(pid, iid):
+    """Mueve una imagen una posición hacia arriba o abajo en la lista."""
+    data = load_data()
+    proj = next((p for p in data['projects'] if p['id']==pid), None)
+    if proj:
+        imgs = proj['images']
+        idx  = next((i for i, im in enumerate(imgs) if im['id']==iid), None)
+        direction = request.form.get('direction')
+        if idx is not None:
+            if direction == 'up' and idx > 0:
+                imgs[idx-1], imgs[idx] = imgs[idx], imgs[idx-1]
+            elif direction == 'down' and idx < len(imgs)-1:
+                imgs[idx+1], imgs[idx] = imgs[idx], imgs[idx+1]
+        save_data(data)
+    return redirect(url_for('admin_project_edit', pid=pid))
+
+@app.route('/admin/projects/<pid>/images/<iid>/cover', methods=['POST'])
+@login_required
+def admin_image_cover(pid, iid):
+    """Marca una imagen como portada: la mueve al frente de la lista,
+    que es la que se muestra en la tarjeta pública."""
+    data = load_data()
+    proj = next((p for p in data['projects'] if p['id']==pid), None)
+    if proj:
+        imgs = proj['images']
+        idx  = next((i for i, im in enumerate(imgs) if im['id']==iid), None)
+        if idx is not None and idx != 0:
+            img = imgs.pop(idx)
+            imgs.insert(0, img)
+        save_data(data)
+    flash('⭐ Portada actualizada','success')
     return redirect(url_for('admin_project_edit', pid=pid))
 
 # ── SIMPLE CRUD ─────────────────────────────────────────────────────────────────

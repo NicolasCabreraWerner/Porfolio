@@ -138,35 +138,49 @@
     </div>
   </form>
 
-  {% if images %}
+  {% if project.images %}
   <div class="img-grid" style="margin-top:1.5rem">
-    {% for img in images %}
-    <div class="img-thumb">
-      {% set src = '/static/img/zentra/' + img.filename if img.filename in ['desktop-1.jpg','desktop-2.jpg','desktop-3.jpg','web-1.jpg','web-2.jpg','web-3.jpg','web-4.jpg','web-5.jpg'] else '/static/img/uploads/' + img.filename %}
+    {% for img in project.images %}
+    <div class="img-thumb" style="position:relative">
+      {% set src = '/static/img/zentra/' + img.filename if img.filename in ['desktop-1.jpg','desktop-2.jpg','desktop-3.jpg','web-1.jpg','web-2.jpg','web-3.jpg','web-4.jpg','web-5.jpg'] else img.filename %}
+      {% if loop.first %}
+      <span style="position:absolute;top:8px;left:8px;background:#111;color:#fff;font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:999px;z-index:2;display:flex;align-items:center;gap:4px">⭐ Portada</span>
+      {% endif %}
       <img src="{{ src }}" alt="{{ img.caption or '' }}"/>
       <div class="img-thumb-body">
-        <form method="POST" action="{{ url_for('admin_image_update', iid=img.id) }}">
+        <div style="display:flex;gap:.35rem;margin-bottom:.5rem">
+          <form method="POST" action="{{ url_for('admin_image_move', pid=project.id, iid=img.id) }}" style="flex:1">
+            <input type="hidden" name="direction" value="up"/>
+            <button type="submit" class="btn btn-ghost btn-sm" style="width:100%" {% if loop.first %}disabled{% endif %} title="Subir">↑</button>
+          </form>
+          <form method="POST" action="{{ url_for('admin_image_move', pid=project.id, iid=img.id) }}" style="flex:1">
+            <input type="hidden" name="direction" value="down"/>
+            <button type="submit" class="btn btn-ghost btn-sm" style="width:100%" {% if loop.last %}disabled{% endif %} title="Bajar">↓</button>
+          </form>
+        </div>
+        {% if not loop.first %}
+        <form method="POST" action="{{ url_for('admin_image_cover', pid=project.id, iid=img.id) }}" style="margin-bottom:.5rem">
+          <button type="submit" class="btn btn-ghost btn-sm" style="width:100%">⭐ Marcar como portada</button>
+        </form>
+        {% endif %}
+        <form method="POST" action="{{ url_for('admin_image_update', pid=project.id, iid=img.id) }}">
           <input type="text" name="caption" value="{{ img.caption or '' }}" placeholder="Caption (es)"/>
           <input type="text" name="caption_en" value="{{ img.caption_en or '' }}" placeholder="Caption (en)"/>
           <select name="tab_group">
-            <option value="desktop" {% if img.tab_group=='desktop' %}selected{% endif %}>Desktop</option>
-            <option value="web" {% if img.tab_group=='web' %}selected{% endif %}>Web</option>
-            <option value="otro" {% if img.tab_group=='otro' %}selected{% endif %}>Otro</option>
+            <option value="desktop" {% if img.tab=='desktop' %}selected{% endif %}>Desktop</option>
+            <option value="web" {% if img.tab=='web' %}selected{% endif %}>Web</option>
+            <option value="otro" {% if img.tab=='otro' %}selected{% endif %}>Otro</option>
           </select>
-          <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem">
-            <input type="checkbox" name="is_wide" {% if img.is_wide %}checked{% endif %} style="width:auto"/>
-            <span style="font-size:11px">Ancho completo</span>
-          </div>
-          <input type="number" name="sort_order" value="{{ img.sort_order }}" placeholder="Orden" min="0"/>
-          <button type="submit" class="btn btn-ghost btn-sm" style="width:100%;margin-top:.4rem">💾 Guardar</button>
+          <button type="submit" class="btn btn-ghost btn-sm" style="width:100%;margin-top:.4rem">💾 Guardar caption</button>
         </form>
-        <form method="POST" action="{{ url_for('admin_image_delete', iid=img.id) }}" onsubmit="return confirm('¿Eliminar imagen?')" style="margin-top:.3rem">
+        <form method="POST" action="{{ url_for('admin_image_delete', pid=project.id, iid=img.id) }}" onsubmit="return confirm('¿Eliminar imagen?')" style="margin-top:.3rem">
           <button type="submit" class="btn btn-danger btn-sm" style="width:100%">🗑️ Eliminar</button>
         </form>
       </div>
     </div>
     {% endfor %}
   </div>
+  <div style="font-size:11.5px;color:#9ca3af;margin-top:.8rem">La primera imagen (⭐ Portada) es la que se muestra en la tarjeta del proyecto en el sitio público. Todas las imágenes son visibles en el zoom/galería.</div>
   {% else %}
   <div style="text-align:center;padding:2rem;color:#9ca3af;font-size:13px">No hay imágenes. Subí algunas arriba.</div>
   {% endif %}

@@ -109,7 +109,14 @@
 
         {% if project.images %}
           {% set first_img = project.images[0] %}
-          <div class="case-image" onclick="openLightbox('{{ img_src(first_img.filename) }}')">
+          {% set img_list = project.images | map(attribute='filename') | map('img_src') | list %}
+          <div class="case-image" onclick='openLightbox({{ img_list | tojson }}, 0)'>
+            {% if project.images | length > 1 %}
+            <span class="case-img-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              +{{ project.images | length - 1 }}
+            </span>
+            {% endif %}
             <img src="{{ img_src(first_img.filename) }}" alt="{{ project.name }}" loading="lazy"/>
           </div>
         {% else %}
@@ -214,7 +221,14 @@
 
 <footer class="site-footer"><span>© {{ info.year }} {{ info.full_name }}</span><a href="#top" data-es="Volver arriba ↑" data-en="Back to top ↑">Volver arriba ↑</a></footer>
 
-<div class="lightbox" id="lightbox" onclick="closeLightbox()"><button class="lightbox-close" aria-label="Cerrar">×</button><img id="lightbox-img" src="" alt="Vista ampliada"/></div>
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" aria-label="Cerrar" onclick="closeLightbox()">×</button>
+  <span class="lightbox-counter" id="lightbox-counter"></span>
+  <button class="lightbox-nav lightbox-prev" id="lightbox-prev" onclick="lightboxPrev(event)" aria-label="Anterior">‹</button>
+  <button class="lightbox-nav lightbox-next" id="lightbox-next" onclick="lightboxNext(event)" aria-label="Siguiente">›</button>
+  <img id="lightbox-img" src="" alt="Vista ampliada" onclick="event.stopPropagation()"/>
+  <div class="lightbox-thumbs" id="lightbox-thumbs" onclick="event.stopPropagation()"></div>
+</div>
 <script src="{{ url_for('static', filename='js/lang.js') }}"></script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% endblock %}
