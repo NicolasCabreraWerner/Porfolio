@@ -26,8 +26,8 @@ def push_to_railway(data_json_str):
         return False
     import urllib.request
     query = """
-    mutation variableUpsert($input: VariableUpsertInput!) {
-      variableUpsert(input: $input)
+    mutation variableUpsert($input: VariableUpsertInput!, $skipDeploys: Boolean) {
+      variableUpsert(input: $input, skipDeploys: $skipDeploys)
     }
     """
     payload = json.dumps({
@@ -39,7 +39,8 @@ def push_to_railway(data_json_str):
                 "environmentId": RAILWAY_ENV,
                 "name":  "PORTFOLIO_DATA",
                 "value": data_json_str
-            }
+            },
+            "skipDeploys": True
         }
     }).encode()
     req = urllib.request.Request(
@@ -121,11 +122,35 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
 
 def img_src(filename):
+    # Imágenes subidas por el admin: se guardan como data-URI base64 dentro
+    # del propio JSON, así sobreviven a reinicios reales del contenedor.
+    if filename.startswith('data:image'):
+        return filename
     if filename in ZENTRA_IMGS:
         return url_for('static', filename='img/zentra/' + filename)
     return url_for('static', filename='img/uploads/' + filename)
 
 app.jinja_env.globals['img_src'] = img_src
+
+def image_to_data_uri(file_storage, max_w=1200, quality=78):
+    """Redimensiona/comprime la imagen subida y la devuelve como data-URI
+    base64, para que quede embebida en PORTFOLIO_DATA y sobreviva a
+    cualquier reinicio del contenedor (no depende del disco efímero)."""
+    try:
+        from PIL import Image
+        import io
+        img = Image.open(file_storage.stream)
+        if img.mode in ('RGBA', 'LA', 'P'):
+            img = img.convert('RGB')
+        w, h = img.size
+        if w > max_w:
+            img = img.resize((max_w, int(h * max_w / w)), Image.LANCZOS)
+        buf = io.BytesIO()
+        img.save(buf, 'JPEG', quality=quality, optimize=True)
+        b64 = base64.b64encode(buf.getvalue()).decode()
+        return f'data:image/jpeg;base64,{b64}'
+    except Exception:
+        return None
 
 def login_required(f):
     @wraps(f)
@@ -280,12 +305,11 @@ def admin_image_upload(pid):
     saved = 0
     for file in request.files.getlist('images'):
         if file and allowed_file(file.filename):
-            ext   = file.filename.rsplit('.',1)[1].lower()
-            fname = f"{uuid.uuid4().hex}.{ext}"
-            file.save(os.path.join(UPLOAD_FOLDER, fname))
-            proj['images'].append({'id':uuid.uuid4().hex[:8],'filename':fname,
-                                   'caption':'','caption_en':'','tab':tab,'wide':False})
-            saved += 1
+            data_uri = image_to_data_uri(file)
+            if data_uri:
+                proj['images'].insert(0, {'id':uuid.uuid4().hex[:8],'filename':data_uri,
+                                          'caption':'','caption_en':'','tab':tab,'wide':False})
+                saved += 1
     save_data(data)
     flash(f'✅ {saved} imagen(es) subida(s)','success')
     return redirect(url_for('admin_project_edit', pid=pid))
