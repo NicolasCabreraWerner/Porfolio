@@ -80,30 +80,41 @@ DEFAULT_DATA = {
     "certifications": [], "skills": [], "languages": []
 }
 
-def load_data():
-    """Lee desde variable de entorno PORTFOLIO_DATA, con fallback al archivo."""
+DATA_FILE = os.path.join(os.path.dirname(__file__), 'data', 'portfolio.json')
+
+def _seed_from_env_once():
+    """Al arrancar el proceso (container nuevo), siembra el archivo local
+    con el último estado guardado en Railway. Las variables de entorno de
+    Railway NO se actualizan en caliente dentro de un proceso ya corriendo,
+    así que esto solo importa en el arranque del contenedor."""
     env_data = os.environ.get('PORTFOLIO_DATA', '')
-    if env_data:
-        try:
-            return json.loads(env_data)
-        except Exception:
-            pass
-    # fallback: archivo local (útil en desarrollo)
-    data_file = os.path.join(os.path.dirname(__file__), 'data', 'portfolio.json')
-    if os.path.exists(data_file):
-        with open(data_file, 'r', encoding='utf-8') as f:
+    if not env_data:
+        return
+    try:
+        json.loads(env_data)  # valida que sea JSON correcto
+    except Exception:
+        return
+    os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
+    with open(DATA_FILE, 'w', encoding='utf-8') as f:
+        f.write(env_data)
+
+_seed_from_env_once()
+
+def load_data():
+    """SIEMPRE lee del archivo local -> refleja cambios al instante,
+    sin depender de que Railway propague la variable de entorno."""
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'r', encoding='utf-8') as f:
             return json.load(f)
     return DEFAULT_DATA
 
 def save_data(data):
-    """Guarda en variable Railway (producción) y archivo local (dev)."""
+    """Escribe el archivo local (efecto inmediato) y además empuja a la
+    variable de Railway para sobrevivir al próximo reinicio del contenedor."""
     data_str = json.dumps(data, ensure_ascii=False)
-    # Siempre escribe el archivo local (para dev y como backup)
-    data_file = os.path.join(os.path.dirname(__file__), 'data', 'portfolio.json')
-    os.makedirs(os.path.dirname(data_file), exist_ok=True)
-    with open(data_file, 'w', encoding='utf-8') as f:
+    os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
+    with open(DATA_FILE, 'w', encoding='utf-8') as f:
         f.write(data_str)
-    # En producción, también persiste en Railway
     push_to_railway(data_str)
 
 def allowed_file(filename):
