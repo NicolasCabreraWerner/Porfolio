@@ -97,3 +97,45 @@ document.addEventListener('keydown', e => {
     touchX = null;
   });
 })();
+
+/* ── GALLERY DRAWER ───────────────────────────────────────
+   Panel deslizante con todas las imágenes de un proyecto.
+   Se abre con el botón "Ver galería" y cada miniatura abre
+   el lightbox de zoom con navegación completa. */
+function openGalleryDrawer(title, images) {
+  const overlay = document.getElementById('galleryDrawerOverlay');
+  const grid    = document.getElementById('galleryDrawerGrid');
+  const titleEl = document.getElementById('galleryDrawerTitle');
+  const countEl = document.getElementById('galleryDrawerCount');
+  if (!overlay || !grid || !images || !images.length) return;
+
+  titleEl.textContent = title || '';
+  countEl.textContent = images.length + (images.length === 1 ? ' imagen' : ' imágenes');
+
+  grid.innerHTML = '';
+  images.forEach((src, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'gallery-drawer-thumb';
+    const img = document.createElement('img');
+    img.src = src;
+    img.loading = 'lazy';
+    img.alt = `${title} — imagen ${i + 1}`;
+    cell.appendChild(img);
+    cell.addEventListener('click', () => openLightbox(images, i));
+    grid.appendChild(cell);
+  });
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeGalleryDrawer() {
+  const overlay = document.getElementById('galleryDrawerOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeGalleryDrawer();
+});
